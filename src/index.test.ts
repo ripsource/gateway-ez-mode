@@ -33,4 +33,8 @@ describe('gatewaySdk', () => {
         expect(rattaBalance.balance).toBe("1")
         expect(rattaBalance.token.resourceAddress).toBe("resource_rdx1t5wuuwfg3uk2y5l88rya553t3v4zyepf7wjekphryw6yepedyf7pug")
     });
+
+    it("should fail", () => {
+        expect(true).toBe(false)
+    })
 });
