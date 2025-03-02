@@ -4,9 +4,9 @@
     "customizations": {
         "vscode": {
             "extensions": [
-                "svelte.svelte-vscode",
-                "bradlc.vscode-tailwindcss",
-                "JoshMu.periscope"
+                "JoshMu.periscope",
+                "esbenp.prettier-vscode",
+                "dbaeumer.vscode-eslint"
             ]
         }
     }
