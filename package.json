@@ -6,7 +6,7 @@
     "build": "rm -rf dist && tsc -p tsconfig.build.json",
     "lint": "eslint --ext .ts src",
     "format": "prettier --write './**/*.ts'",
-    "test": "jest"
+    "test": "vitest run"
   },
   "keywords": [],
   "repository": {
@@ -26,7 +26,8 @@
     "prettier": "3.5.2",
     "ts-jest": "^29.2.6",
     "typescript": "^5.7.3",
-    "typescript-eslint": "^8.25.0"
+    "typescript-eslint": "^8.25.0",
+    "vitest": "^3.0.7"
   },
   "dependencies": {
     "@radixdlt/babylon-gateway-api-sdk": "^1.10.0-dev.1"

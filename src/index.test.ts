@@ -1,5 +1,6 @@
 import { GatewayEzMode } from '.';
 import { Account } from './account';
+import { describe, it, expect } from 'vitest'
 
 const RATTA_RESOURCE =
     'resource_rdx1t5wuuwfg3uk2y5l88rya553t3v4zyepf7wjekphryw6yepedyf7pug';
