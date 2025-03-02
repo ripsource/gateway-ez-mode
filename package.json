@@ -5,7 +5,7 @@
   "scripts": {
     "build": "rm -rf dist && tsc -p tsconfig.build.json",
     "lint": "eslint --ext .ts src",
-    "format": "prettier --write ./**/*.ts",
+    "format": "prettier --write './**/*.ts'",
     "test": "jest"
   },
   "keywords": [],
