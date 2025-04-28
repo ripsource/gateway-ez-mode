@@ -16,6 +16,12 @@ export interface TransactionStreamInput {
     gateway: GatewayApiClient;
     startStateVersion: number;
     batchSize: number;
+    opt_ins?: {
+        detailed_events: boolean;
+        manifest_instructions: boolean;
+        affected_global_entities: boolean;
+        balance_changes: boolean;
+    }
     stateVersionManager: StateVersionManager;
 }
 
@@ -33,18 +39,25 @@ export class TransactionStream {
     gateway: GatewayApiClient;
     startStateVersion: number;
     batchSize: number;
-
+    opt_ins?: {
+        detailed_events: boolean;
+        manifest_instructions: boolean;
+        affected_global_entities: boolean;
+        balance_changes: boolean;
+    }
     stateVersionManager: StateVersionManager;
 
     constructor({
         gateway,
         startStateVersion,
         batchSize,
+        opt_ins,
         stateVersionManager,
     }: TransactionStreamInput) {
         this.gateway = gateway;
         this.startStateVersion = startStateVersion;
         this.batchSize = batchSize;
+        this.opt_ins = opt_ins;
         this.stateVersionManager = stateVersionManager;
     }
 
@@ -82,6 +95,7 @@ export class TransactionStream {
             gateway,
             startStateVersion: input.startStateVersion || stateVersion,
             batchSize: input.batchSize || 100,
+            opt_ins: input.opt_ins,
             stateVersionManager,
         });
     }
@@ -123,8 +137,11 @@ export class TransactionStream {
                         },
                         order: 'Asc',
                         kind_filter: 'User',
-                        opt_ins: {
+                        opt_ins: this.opt_ins || {
                             detailed_events: true,
+                            manifest_instructions: true,
+                            affected_global_entities: true,
+                            balance_changes: true,
                         },
                         limit_per_page: this.batchSize,
                         transaction_status_filter: 'Success',
