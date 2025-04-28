@@ -21,7 +21,7 @@ export interface TransactionStreamInput {
         manifest_instructions: boolean;
         affected_global_entities: boolean;
         balance_changes: boolean;
-    }
+    };
     stateVersionManager: StateVersionManager;
 }
 
@@ -44,7 +44,7 @@ export class TransactionStream {
         manifest_instructions: boolean;
         affected_global_entities: boolean;
         balance_changes: boolean;
-    }
+    };
     stateVersionManager: StateVersionManager;
 
     constructor({
@@ -138,10 +138,10 @@ export class TransactionStream {
                         order: 'Asc',
                         kind_filter: 'User',
                         opt_ins: this.opt_ins || {
-                            detailed_events: true,
-                            manifest_instructions: true,
-                            affected_global_entities: true,
-                            balance_changes: true,
+                            detailed_events: false,
+                            manifest_instructions: false,
+                            affected_global_entities: false,
+                            balance_changes: false,
                         },
                         limit_per_page: this.batchSize,
                         transaction_status_filter: 'Success',
