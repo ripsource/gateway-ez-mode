@@ -1,5 +1,15 @@
 # @calamari-radix/sbor-ez-mode
 
+## 1.3.0
+
+### Minor Changes
+
+- 177bc3a: streamer optins dunno what im doing
+
+### Patch Changes
+
+- bea08bd: minor change in a single error message
+
 ## 1.2.1
 
 ### Patch Changes

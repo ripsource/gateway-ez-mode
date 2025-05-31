@@ -14,13 +14,14 @@ import { MapDefinition, MapSchema } from './schemas/map';
 import { InternalAddressSchema } from './schemas/internalAddress';
 import { InstantSchema } from './schemas/instant';
 import { OptionSchema } from './schemas/option';
+import { BytesSchema } from './schemas/bytes';
 
 /**
  * The main object through which to build schemas for parsing SBOR values.
  * This object contains methods for creating schemas for all the different types of values that can be parsed.
  * @example
  * ```ts
- * import { s } from '@calamari-radix/gateway-ez-mode';
+ * import { s } from '@rippy/gateway-ez-mode';
  * const myStructSchema = s.struct({
  *   bing: s.string(),
  *   bong: s.number(),
@@ -134,6 +135,11 @@ export const s = {
      * const structInTupleSchema = s.orderedTuple([s.struct({ foo: s.string() }), s.number()]);
      * ```
      */
+    /**
+     * A shema for Bytes
+     * @returns BytesSchema
+     */
+    bytes: () => new BytesSchema(),
     tuple: <const T extends SborSchema<unknown>[]>(schemas: T) =>
         new OrderedTupleSchema(schemas),
     /**

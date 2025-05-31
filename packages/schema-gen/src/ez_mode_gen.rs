@@ -2,9 +2,7 @@ use crate::gateway::BlueprintWithSchema;
 use radix_common::data::scrypto::well_known_scrypto_custom_types;
 use sbor::prelude::indexmap::IndexMap;
 use sbor::{LocalTypeId, LocalTypeKind, Schema, TypeKind, TypeMetadata};
-use scrypto::prelude::{
-    scrypto_decode, ScryptoCustomSchema, ScryptoCustomTypeKind,
-};
+use scrypto::prelude::{scrypto_decode, ScryptoCustomSchema, ScryptoCustomTypeKind};
 use std::borrow::Cow;
 use std::collections::HashSet;
 
@@ -52,8 +50,7 @@ pub struct RegistryEntry {
 impl RegistryEntry {
     /// Returns a unique variable name based on the type and its index in the registry if the type name is not unique.
     pub fn unique_var_name(&self, registry: &SchemaRegistry) -> String {
-        let position =
-            registry.entries.iter().position(|e| e == self).unwrap_or(0);
+        let position = registry.entries.iter().position(|e| e == self).unwrap_or(0);
         match &self.type_name {
             Some(name) => {
                 if registry.is_type_name_unique(name) {
@@ -94,15 +91,11 @@ impl RegistryEntry {
             }
             SborEzModeSchemaKind::String => "s.string()".to_string(),
             SborEzModeSchemaKind::Decimal => "s.decimal()".to_string(),
-            SborEzModeSchemaKind::InternalAddress => {
-                "s.internalAddress()".to_string()
-            }
+            SborEzModeSchemaKind::InternalAddress => "s.internalAddress()".to_string(),
             SborEzModeSchemaKind::Number => "s.number()".to_string(),
             SborEzModeSchemaKind::Bool => "s.bool()".to_string(),
             SborEzModeSchemaKind::Instant => "s.instant()".to_string(),
-            SborEzModeSchemaKind::NonFungibleLocalId => {
-                "s.nonFungibleLocalId()".to_string()
-            }
+            SborEzModeSchemaKind::NonFungibleLocalId => "s.nonFungibleLocalId()".to_string(),
             SborEzModeSchemaKind::Value => "s.value()".to_string(),
             SborEzModeSchemaKind::Array { element_type } => {
                 let entry = &registry.entries[*element_type as usize];
@@ -137,11 +130,7 @@ impl RegistryEntry {
                         if is_inline(entry) {
                             format!("{}: {}", name, entry.render(registry))
                         } else {
-                            format!(
-                                "{}: {}",
-                                name,
-                                entry.unique_var_name(registry)
-                            )
+                            format!("{}: {}", name, entry.unique_var_name(registry))
                         }
                     })
                     .collect();
@@ -316,10 +305,7 @@ impl SchemaRegistry {
         for (i, entry) in self.entries.iter().enumerate() {
             for &dep in &entry.dependencies {
                 if (dep as usize) >= n {
-                    return Err(format!(
-                        "Invalid dependency index {} in entry {}",
-                        dep, i
-                    ));
+                    return Err(format!("Invalid dependency index {} in entry {}", dep, i));
                 }
                 in_degree[i] += 1;
                 dependents[dep as usize].push(i as u32);
@@ -352,10 +338,9 @@ impl SchemaRegistry {
     /// Render the registry entries in topologically sorted order.
     pub fn render(&self, package_address: &str, module: bool) -> String {
         let mut output = String::new();
-        let sorted_indices =
-            self.topologically_sorted_indices().unwrap_or_else(|err| {
-                panic!("Error performing topological sort: {}", err);
-            });
+        let sorted_indices = self.topologically_sorted_indices().unwrap_or_else(|err| {
+            panic!("Error performing topological sort: {}", err);
+        });
         for i in sorted_indices {
             let entry = &self.entries[i as usize];
             if entry.type_name == Some("AvlTree".to_string()) {
@@ -380,9 +365,7 @@ impl SchemaRegistry {
         let mut final_output = String::new();
 
         if module {
-            final_output.push_str(&format!(
-                "import s from '@calamari-radix/sbor-ez-mode';\n"
-            ));
+            final_output.push_str(&format!("import s from '@calamari-radix/sbor-ez-mode';\n"));
         }
 
         final_output.push_str(&format!(
@@ -403,8 +386,7 @@ fn register_type(
 ) -> (RegistryEntry, u32) {
     let kind = schema.resolve_type_kind(type_id).unwrap();
     let metadata = schema.resolve_type_metadata(type_id).unwrap();
-    let (entry, index) =
-        registry.get_or_register(schema, metadata, kind, type_id);
+    let (entry, index) = registry.get_or_register(schema, metadata, kind, type_id);
     (entry.clone(), index)
 }
 
@@ -425,8 +407,7 @@ fn handle_tuple(
             .iter()
             .enumerate()
             .map(|(i, &field_type)| {
-                let (entry, index) =
-                    register_type(registry, schema, field_type);
+                let (entry, index) = register_type(registry, schema, field_type);
                 (field_names[i].to_string(), index, entry)
             })
             .collect();
@@ -462,8 +443,7 @@ fn handle_tuple(
                 deps.into_iter()
             })
             .collect();
-        let indices =
-            field_entries.into_iter().map(|(_, index)| index).collect();
+        let indices = field_entries.into_iter().map(|(_, index)| index).collect();
         RegistryEntry {
             type_hash: TypeHash::create(metadata, kind),
             type_name: metadata.get_name().map(|s| s.to_string()),
@@ -508,8 +488,7 @@ fn handle_map(
     kind: &TypeKind<ScryptoCustomTypeKind, LocalTypeId>,
 ) -> RegistryEntry {
     let (key_entry, key_index) = register_type(registry, schema, key_type);
-    let (value_entry, value_index) =
-        register_type(registry, schema, value_type);
+    let (value_entry, value_index) = register_type(registry, schema, value_type);
     let mut dependencies: HashSet<u32> = key_entry
         .dependencies
         .union(&value_entry.dependencies)
@@ -537,15 +516,12 @@ fn handle_custom(
     kind: &TypeKind<ScryptoCustomTypeKind, LocalTypeId>,
 ) -> RegistryEntry {
     let schema_kind = match custom {
-        ScryptoCustomTypeKind::Decimal
-        | ScryptoCustomTypeKind::PreciseDecimal => {
+        ScryptoCustomTypeKind::Decimal | ScryptoCustomTypeKind::PreciseDecimal => {
             SborEzModeSchemaKind::Decimal
         }
         ScryptoCustomTypeKind::Reference => SborEzModeSchemaKind::Address,
         ScryptoCustomTypeKind::Own => SborEzModeSchemaKind::InternalAddress,
-        ScryptoCustomTypeKind::NonFungibleLocalId => {
-            SborEzModeSchemaKind::NonFungibleLocalId
-        }
+        ScryptoCustomTypeKind::NonFungibleLocalId => SborEzModeSchemaKind::NonFungibleLocalId,
     };
     RegistryEntry {
         type_hash: TypeHash::create(metadata, kind),
@@ -567,18 +543,13 @@ fn handle_enum(
 ) -> RegistryEntry {
     // Check for Option enum.
     if metadata.type_name.as_ref() == Some(&Cow::Owned("Option".to_string())) {
-        if let Some((_, type_ids)) =
-            variants.into_iter().find(|(variant_id, _)| {
-                let variant_data = metadata.get_matching_enum_variant_data(
-                    **variant_id,
-                    variants.len(),
-                );
-                variant_data.variant_name.as_deref() == Some("Some")
-            })
-        {
+        if let Some((_, type_ids)) = variants.into_iter().find(|(variant_id, _)| {
+            let variant_data =
+                metadata.get_matching_enum_variant_data(**variant_id, variants.len());
+            variant_data.variant_name.as_deref() == Some("Some")
+        }) {
             if type_ids.len() == 1 {
-                let (entry, index) =
-                    register_type(registry, schema, type_ids[0]);
+                let (entry, index) = register_type(registry, schema, type_ids[0]);
                 let mut dependencies = entry.dependencies.clone();
                 dependencies.insert(index);
                 return RegistryEntry {
@@ -602,8 +573,7 @@ fn handle_enum(
                         deps.into_iter()
                     })
                     .collect();
-                let indices =
-                    entries.into_iter().map(|(_, index)| index).collect();
+                let indices = entries.into_iter().map(|(_, index)| index).collect();
                 return RegistryEntry {
                     type_hash: TypeHash::create(metadata, kind),
                     type_name: metadata.get_name().map(|s| s.to_string()),
@@ -621,19 +591,15 @@ fn handle_enum(
         let variant_entries: Vec<(String, RegistryEntry, u32)> = variants
             .iter()
             .map(|(variant_id, type_ids)| {
-                let variant_data = metadata.get_matching_enum_variant_data(
-                    *variant_id,
-                    type_ids.len(),
-                );
-                let variant_name =
-                    variant_data.variant_name.unwrap_or("<unnamed>");
+                let variant_data =
+                    metadata.get_matching_enum_variant_data(*variant_id, type_ids.len());
+                let variant_name = variant_data.variant_name.unwrap_or("<unnamed>");
                 if let Some(field_names) = &variant_data.field_names {
                     let fields: Vec<(String, u32, RegistryEntry)> = type_ids
                         .iter()
                         .enumerate()
                         .map(|(i, &tid)| {
-                            let (entry, index) =
-                                register_type(registry, schema, tid);
+                            let (entry, index) = register_type(registry, schema, tid);
                             (field_names[i].to_string(), index, entry)
                         })
                         .collect();
@@ -672,14 +638,11 @@ fn handle_enum(
                             deps.into_iter()
                         })
                         .collect();
-                    let indices =
-                        entries.into_iter().map(|(_, index)| index).collect();
+                    let indices = entries.into_iter().map(|(_, index)| index).collect();
                     let entry = RegistryEntry {
                         type_hash: TypeHash::create(metadata, kind),
                         type_name: None,
-                        schema_kind: SborEzModeSchemaKind::Tuple {
-                            fields: indices,
-                        },
+                        schema_kind: SborEzModeSchemaKind::Tuple { fields: indices },
                         dependencies,
                     };
                     let index = registry.register(&entry);
@@ -726,15 +689,11 @@ fn create_entry(
         TypeKind::Array { element_type } => {
             handle_array(*element_type, registry, schema, metadata, kind)
         }
-        TypeKind::Enum { variants } => {
-            handle_enum(variants, registry, schema, metadata, kind)
-        }
+        TypeKind::Enum { variants } => handle_enum(variants, registry, schema, metadata, kind),
         TypeKind::Map {
             key_type,
             value_type,
-        } => {
-            handle_map(*key_type, *value_type, registry, schema, metadata, kind)
-        }
+        } => handle_map(*key_type, *value_type, registry, schema, metadata, kind),
         TypeKind::Bool
         | TypeKind::U8
         | TypeKind::U16
@@ -752,11 +711,7 @@ fn create_entry(
         },
         TypeKind::I64 => {
             // If the integer is of the well known Instant type, we would like to use s.insant() for it.
-            if type_id
-                == LocalTypeId::WellKnown(
-                    well_known_scrypto_custom_types::INSTANT_TYPE,
-                )
-            {
+            if type_id == LocalTypeId::WellKnown(well_known_scrypto_custom_types::INSTANT_TYPE) {
                 RegistryEntry {
                     type_hash: TypeHash::create(metadata, kind),
                     type_name: metadata.get_name().map(|s| s.to_string()),
@@ -814,8 +769,7 @@ pub fn generate_ir(schemas: &[BlueprintWithSchema]) -> SchemaRegistry {
 
     for schema in schemas {
         let schema_deserialized: Schema<ScryptoCustomSchema> =
-            scrypto_decode(&schema.schema.schema)
-                .expect("Failed to decode schema");
+            scrypto_decode(&schema.schema.schema).expect("Failed to decode schema");
 
         let mut types = schema.blueprint.events.clone();
         types.push(schema.blueprint.state.clone());
@@ -824,8 +778,7 @@ pub fn generate_ir(schemas: &[BlueprintWithSchema]) -> SchemaRegistry {
             if let Some((metadata, _kind)) =
                 get_type_by_index(&schema_deserialized, type_data.type_id)
             {
-                let type_id =
-                    LocalTypeId::SchemaLocalIndex(type_data.type_id as usize);
+                let type_id = LocalTypeId::SchemaLocalIndex(type_data.type_id as usize);
                 let var = registry.get_or_register(
                     &schema_deserialized,
                     &metadata,

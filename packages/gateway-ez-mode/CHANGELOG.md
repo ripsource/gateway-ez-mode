@@ -1,4 +1,16 @@
-# @calamari-radix/gateway-ez-mode
+# @rippy/gateway-ez-mode
+
+## 2.0.0
+
+### Major Changes
+
+- 177bc3a: streamer optins dunno what im doing
+
+### Patch Changes
+
+- Updated dependencies [bea08bd]
+- Updated dependencies [177bc3a]
+    - @calamari-radix/sbor-ez-mode@1.3.0
 
 ## 1.6.2
 

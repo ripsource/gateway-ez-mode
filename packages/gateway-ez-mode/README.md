@@ -8,9 +8,9 @@ All devs in Radix, whether frontend or backend, surely have written helpers that
 
 # Installation
 
-`npm install @calamari-radix/gateway-ez-mode`
+`npm install @rippy/gateway-ez-mode`
 
-Find it on [NPM](https://www.npmjs.com/package/@calamari-radix/gateway-ez-mode)
+Find it on [NPM](https://www.npmjs.com/package/@rippy/gateway-ez-mode)
 
 # Features
 
@@ -85,7 +85,7 @@ This package exposes [`sbor-ez-mode`](https://www.npmjs.com/package/@calamari-ra
 
 ```ts
 // s (for sbor) is the main object you'll have to import to create schemas and parse
-import { s } from '@calamari-radix/gateway-ez-mode';
+import { s } from '@rippy/gateway-ez-mode';
 
 const swapEventSchema = s.struct({
     input_address: s.address(),
