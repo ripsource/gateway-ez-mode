@@ -1,6 +1,6 @@
 {
-  "name": "@calamari-radix/sbor-ez-mode",
-  "version": "1.3.0",
+  "name": "@rippy/sbor-ez-mode",
+  "version": "2.6.9",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {

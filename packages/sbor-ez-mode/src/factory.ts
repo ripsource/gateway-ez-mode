@@ -77,9 +77,15 @@ export const s = {
      */
     address: () => new AddressSchema(),
     /**
+     * A shema for Bytes
+     * @returns BytesSchema
+     */
+    bytes: () => new BytesSchema(),
+    /**
      * A schema for an Internal (owned) Address, such as a Vault or KeyValueStore
      * @returns InternalAddressSchema
      */
+
     internalAddress: () => new InternalAddressSchema(),
     /**
      * A schema for a Struct
@@ -135,11 +141,7 @@ export const s = {
      * const structInTupleSchema = s.orderedTuple([s.struct({ foo: s.string() }), s.number()]);
      * ```
      */
-    /**
-     * A shema for Bytes
-     * @returns BytesSchema
-     */
-    bytes: () => new BytesSchema(),
+
     tuple: <const T extends SborSchema<unknown>[]>(schemas: T) =>
         new OrderedTupleSchema(schemas),
     /**
