@@ -11,7 +11,7 @@ export class BytesSchema extends SborSchema<string> {
         if (value.kind !== 'Bytes') {
             throw new SborError('Invalid bytes', path);
         }
-        if (value.element_type_name !== 'U8') {
+        if (value.element_kind !== 'U8') {
             throw new SborError('Invalid bytes element type', path);
         }
         return true;

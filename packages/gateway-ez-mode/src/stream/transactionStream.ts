@@ -16,6 +16,7 @@ export interface TransactionStreamInput {
     gateway: GatewayApiClient;
     startStateVersion: number;
     batchSize: number;
+    affected_entities?: string[];
     opt_ins?: {
         detailed_events: boolean;
         manifest_instructions: boolean;
@@ -39,6 +40,7 @@ export class TransactionStream {
     gateway: GatewayApiClient;
     startStateVersion: number;
     batchSize: number;
+    affected_entities?: string[];
     opt_ins?: {
         detailed_events: boolean;
         manifest_instructions: boolean;
@@ -52,12 +54,14 @@ export class TransactionStream {
         startStateVersion,
         batchSize,
         opt_ins,
+        affected_entities,
         stateVersionManager,
     }: TransactionStreamInput) {
         this.gateway = gateway;
         this.startStateVersion = startStateVersion;
         this.batchSize = batchSize;
         this.opt_ins = opt_ins;
+        this.affected_entities = affected_entities;
         this.stateVersionManager = stateVersionManager;
     }
 
@@ -135,6 +139,7 @@ export class TransactionStream {
                         from_ledger_state: {
                             state_version: stateVersion,
                         },
+                        affected_global_entities_filter: this.affected_entities,
                         order: 'Asc',
                         kind_filter: 'User',
                         opt_ins: this.opt_ins || {

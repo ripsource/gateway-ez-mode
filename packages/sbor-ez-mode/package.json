@@ -1,6 +1,6 @@
 {
   "name": "@rippy/sbor-ez-mode",
-  "version": "2.6.9",
+  "version": "10.6.9",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {

@@ -34,7 +34,7 @@ describe(
                     manifest_instructions: false,
                     affected_global_entities: true,
                     balance_changes: false,
-                }
+                },
             });
             let transactions = await stream.next();
             while (transactions.lastSeenStateVersion < TO_STATE_VERSION) {
