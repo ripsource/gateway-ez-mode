@@ -26,13 +26,15 @@ export class StreamService {
     async getTransactionStream({
         startStateVersion,
         batchSize,
-        opt_ins
+        opt_ins,
+        affected_entities,
     }: GetTransactionStreamInput): Promise<TransactionStream> {
         return TransactionStream.create({
             gateway: this.gateway,
             startStateVersion,
             batchSize,
             opt_ins,
+            affected_entities,
         });
     }
 }
