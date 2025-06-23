@@ -20,6 +20,7 @@ export class StreamService {
      * @param startStateVersion The state version to start streaming from.
      * @param batchSize The maximum number of transactions to fetch per call.
      * @param opt_ins Optional settings for what data to include in transaction responses.
+     * @param affected_entities Optional list of entities to filter transactions by.
      * @returns A promise that resolves with a TransactionStream class instance.
      * @throws {GatewayError} If an error occurs while fetching data from the Radix Gateway API
      */
